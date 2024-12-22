@@ -27,7 +27,7 @@ def setup_logger(name: str = "global", level: int = logging.DEBUG) -> logging.Lo
 log = setup_logger()
 
 from .component.errors import *
-from .plugins import BasePlugin
 from .component.webget import get_html
 from .component.Anime import Anime
+from .plugins import BasePlugin
 from .Searcher import Searcher

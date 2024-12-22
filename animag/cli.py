@@ -4,13 +4,13 @@ from typing import Dict, Any
 from rich.console import Console
 from rich.table import Table
 
-from .Searcher import Searcher
+from . import Anime, Searcher
 
 console = Console()
 
 
-def print_results(searcher: Searcher) -> None:
-    if not searcher.animes:
+def print_results(animes: list[Anime]) -> None:
+    if not animes:
         console.print("[bold yellow]搜索结果为空[/bold yellow]")
         return
 
@@ -19,7 +19,7 @@ def print_results(searcher: Searcher) -> None:
     table.add_column("标题", style="dim", width=60, overflow="fold")
     table.add_column("大小", style="cyan", justify="right", width=10)
 
-    for idx, anime in enumerate(searcher.animes, start=1):
+    for idx, anime in enumerate(animes, start=1):
         table.add_row(str(idx), anime.title, anime.size)
 
     console.print(table)
@@ -50,12 +50,12 @@ def main() -> None:
     animes = searcher.search(**search_params)
 
     if animes:
-        print_results(searcher)
+        print_results(animes)
         selection = get_user_selection(len(searcher.animes))
 
         if selection > 0:
             anime = animes[selection]
-            console.print(f"[bold green]已选择 {searcher.anime.title}[/bold green]")
+            console.print(f"[bold green]已选择 {anime.title}[/bold green]")
             console.print(f"[bold green]其磁链为: [/bold green][bold yellow]{anime.magnet}[/bold yellow]")
         else:
             console.print("[bold yellow]已退出选择[/bold yellow]")
