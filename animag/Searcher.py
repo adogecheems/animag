@@ -50,7 +50,7 @@ class Searcher:
         if verify is not None:
             kwargs['verify'] = verify
         if timefmt is not None:
-            self.settimefmt(timefmt)
+            self.set_timefmt(timefmt)
             kwargs['timefmt'] = self.timefmt
 
         plugin = plugins.get_plugin(plugin_name)(**kwargs)
@@ -58,7 +58,7 @@ class Searcher:
         log.info(f"Successfully loaded plugin: {plugin_name}")
         return plugin
 
-    def settimefmt(self, timefmt: str) -> None:
+    def set_timefmt(self, to_timefmt: str) -> None:
         """
         Set and validate the time format.
 
@@ -69,15 +69,17 @@ class Searcher:
             TimeFormatError: If time format is invalid
         """
         try:
-            time.strftime(timefmt, time.localtime())
+            time.strftime(to_timefmt, time.localtime())
         except Exception as e:
-            raise TimeFormatError(f"Invalid time format {timefmt} : {e!r}")
-
-        self.timefmt = timefmt
+            raise TimeFormatError(f"Invalid time format {to_timefmt} : {e!r}")
 
         if self.animes is not None:
+            from_timefmt = r'%Y/%m/%d %H:%M' if self.timefmt is None else self.timefmt
+
             for anime in self.animes:
-                anime.set_timefmt(timefmt)
+                anime.set_timefmt(from_timefmt, to_timefmt)
+
+        self.timefmt = to_timefmt
 
     def search(self, keyword: str,
                collected: Optional[bool] = None,
@@ -121,7 +123,7 @@ class Searcher:
 
         return self.animes
 
-    def size_format_all(self, unit: str = 'MB') -> None:
+    def size_format_all(self, unit: str = 'MB') -> List[Anime]:
         """
         Convert the size of all anime in the search results to the specified unit.
 
@@ -143,6 +145,8 @@ class Searcher:
             raise
         else:
             self.animes = formatted_animes
+
+        return self.animes
 
     def save_csv(self, filename: str) -> None:
         """

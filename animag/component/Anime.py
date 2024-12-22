@@ -1,7 +1,6 @@
 import re
 from dataclasses import dataclass
 import time
-from functools import lru_cache
 from typing import Tuple, Optional
 
 from .. import log, SizeFormatError, TimeFormatError
@@ -71,11 +70,10 @@ class Anime:
         try:
             return time.strftime(to_timefmt, time.strptime(self.time, from_timefmt))
         except Exception as e:
-            raise TimeFormatError(f"Invalid time format: {e.args[0]}")
+            raise TimeFormatError(f"Invalid time format: {e!r}")
 
 
     @staticmethod
-    @lru_cache(maxsize=128)
     def convert_byte(value: float, from_unit: str, to_unit: str) -> Optional[float]:
         """
         Convert a byte value from one unit to another.
@@ -97,7 +95,6 @@ class Anime:
             return None
 
     @staticmethod
-    @lru_cache(maxsize=128)
     def extract_value_and_unit(size: str) -> Optional[Tuple[float, str]]:
         """
         Extract the numeric value and unit from a size string.
@@ -169,7 +166,6 @@ class Anime:
             hash_value = "unknown"
         return f"Anime '{self.title}' with hash {hash_value}"
 
-    @lru_cache(maxsize=1)
     def _get_hash(self, magnet: str) -> str:
         """
         Extract and return the hash from the magnet link.

@@ -1,197 +1,202 @@
-# Animag
+<h1 align="center" style="font-size: 3rem; color: #1772b4">Animag 2.0</h1>
 
-[English](https://github.com/adogecheems/anisearch/blob/master/README_en.md)
+---
 
-animag 是一个功能齐全的 Python 库，用于搜索动画磁力链接。它还提供了一个灵活的插件系统，允许用户从不同的来源搜索动画信息
+## 项目概述
 
-## 功能特点
+一个用于搜索动漫磁力链接与种子的Python库。它拥有强大的可扩展性， 支持通过插件系统从不同来源搜索动画资源，并能够处理磁力链接、文件大小转换等功能。
 
-- 支持多个搜索源
-- 强大的可扩展性
-- CSV 导出功能
-- 代理支持
+## 主要特性
+
+- 支持多个资源站点的搜索功能
+- 可扩展的插件系统
+- 文件大小单位转换
+- CSV导出功能
+- 磁力链接处理
+- 时间格式转换
+- 错误处理机制
 
 ## 安装
 
-你可以直接使用 pip 安装 anisearch：
+Animag可以使用pip轻松地安装：
 
-```
-pip install Anisearch-lib
+```commandline
+pip install animag
 ```
 
 ## 使用示例
 
-以下是使用 anisearch 的基本示例：
-
 ```python
-from animag import AniSearch
+# 导入搜索器类
+from animag import Searcher
 
-# 创建 AniSearch 实例
-searcher = AniSearch()
-
-# __init__()方法可选的参数：
-# plugin_name: 搜索源名称，默认为 'dmhy'
-# parser: beautifulsoup 解析器，在'dmhy'中默认为'lxml'
-# verify: 是否验证 SSL 证书，在'dmhy'中默认为False
-# time_fmt: 时间格式，默认为'%Y-%m-%d %H:%M:%S'
-
-# 以上参数的默认值在选择不同的插件的时候可能会有所不同
+# 创建搜索器实例
+searcher = Searcher(plugin_name='dmhy',
+                    no_search_errors=True)
 
 # 搜索动画
-searcher.search('我推的孩子')
+results = searcher.search("葬送的芙莉莲",
+                          collected=True)
 
-# search()方法可选的参数：
-# collected: 是否只搜索季度合集，默认为True
-# proxies: 代理url
-#
-# 使用代理
-# proxies = {
-#     'http': 'http://10.10.1.10:3128',
-#     'https': 'http://10.10.1.10:1080',
-# } # 别当真，就是示例而已
-# searcher.search("我推的孩子", proxies=proxies)
-# system_proxy: 是否使用系统代理(好像总是不能工作)
+# 打印搜索结果
+print(results)
 
-# 搜索成功的话会出现如下字样:
-# This search is complete: 我推的孩子
+"""
+示例输出(2024年12月22日的结果)：
 
-# 输出搜索结果列表
-print(searcher.animes)
+Search completed successfully: 葬送的芙莉莲
+[Anime(time='2024/10/20 12:23', title='[7³ACG\u200b] \u200b葬送的芙莉莲/Sousou no Frieren S01 | 01-28 [简繁字幕] BDrip 1080p AV1 OPUS 2.0\u200b\u200b\u200b', size='17.1GB', magnet='magnet:?xt=urn:btih:...
 
-# 展示部分输出（在2024年八月的结果）
-# [Anime('2024/03/21 13:25', '【动漫国字幕组】[【我推的孩子】][01-11][BDRip][AVC_AAC][1080P][简体][MP4]', '7.3GB', 'magnet:?xt=urn:btih:P76PROAB5JRUAPHIST63HGRUOMW7SEWU&dn=&tr=...
+"""
 
-# 如果一切正常，选择第一个搜索结果（当然也可以选择其他的）
-searcher.select(0)
+# 转换所有结果的文件大小为GB
+searcher.size_format_all('MB')
 
-# 选择后anime属性可用
-print(searcher.anime.title)
-print(searcher.anime.size)
-
-# 输出：
-# '【动漫国字幕组】[【我推的孩子】][01-11][BDRip][AVC_AAC][1080P][简体][MP4]'
-# '7.3GB'
+# 保存结果到CSV文件
+searcher.save_csv("search_results.csv")
 ```
 
-## 主要组件
+## 核心组件
 
-### AniSearch 类
+### Anime类
 
-`AniSearch` 是主要的搜索类，提供以下方法：
+`Anime`类用于表示单个动画资源的信息
 
-- `search(keyword, collected=None, proxies=None, system_proxy=None, **extra_options)`: 搜索动画
-- `select(index)`: 从搜索结果中选择一个动画
-- `size_format(unit='MB')`: 转换选定动画的文件大小
-- `save_csv(filename)`: 将搜索结果保存到 CSV 文件（所有结果）
-
-** extra_options 参数会被并入爬取时的查询字符串中，可以用于指定额外的分类或选项，具体的查询字符串请自行查看搜索源搜索时的 url
-
-![查询字符串](https://cdn.mmoe.work/img/url.png)
-
-### Anime 类
-
-`Anime` 类代表一个动画条目，包含以下属性：
+#### 主要属性
 
 - `time`: 发布时间
-- `title`: 动画标题
+- `title`: 标题
 - `size`: 文件大小
 - `magnet`: 磁力链接
+- `torrent`: 种子链接
 
-其__eq__方法被实现为比较两个 Anime 实例磁力链接的哈希值。
+#### 主要方法
 
-### 插件系统
+- `size_format()`: 转换文件大小单位
+- `set_timefmt()`: 转换时间格式
 
-AniSearch 使用基于元类的插件系统来支持不同的搜索源
+### Searcher类
 
-### 已实现的插件
+`Searcher`类是搜索功能的核心实现
 
-非常悲哀的是，以下搜索源都需要代理
+#### 主要功能
 
-- `dmhy`: 动漫花园搜索源（速度较快）
-- `comicat`: [存档] 漫猫搜索源（实现非常慢，慎用，建议只搜索季度合集）
-- `kisssub`: [存档] 爱恋搜索源（同上）
-- `miobt`：[存档] MioBT 搜索源（同上）
-- `nyaa`: nyaa.si 搜索源（速度超群，不能使用季度合集搜索）
-- `acgrip`: acg.rip 搜索源（速度适中，不能使用季度合集搜索，由于站点的自身原因，获取的magnet是种子的下载链接）
-- `tokyotosho` : 东京图书馆搜索源（速度适中，不能使用季度合集搜索，绝大部分资源都需要英/日文才能搜到）
+- 初始化搜索插件
+- 执行搜索操作
+- 处理搜索结果
+- 导出数据
 
-## 创建自定义插件
-要创建自定义插件，您需要继承 BasePlugin 类并实现 search 方法，anisearch 提供了一个实用的http请求函数 `anisearch.plugins._webget.get_html()`，可以直接使用。以下是一个简单的示例：
+#### 主要方法
+
+- `search()`: 搜索动画资源
+- `size_format_all()`: 批量转换文件大小单位
+- `save_csv()`: 将搜索结果保存为CSV文件
+- `set_timefmt()`: 设置时间格式
+
+## 错误处理
+
+系统定义了多种错误类型：
+
+- `PluginImportError`: 插件导入错误
+- `SearchRequestError`: 搜索请求错误
+- `SearchParseError`: 搜索结果解析错误
+- `SizeFormatError`: 文件大小格式化错误
+- `TimeFormatError`: 时间格式化错误
+- `SaveCSVError`: CSV保存错误
+
+## 配置选项
+
+### 搜索器初始化选项
+
+- `plugin_name`: 插件名称（默认：'dmhy'）
+- `parser`: 解析器选项
+- `verify`: 验证选项
+- `timefmt`: 时间格式
+- `no_search_errors`: 是否忽略搜索错误
+
+### 搜索选项
+
+- `keyword`: 搜索关键词
+- `collected`: 是否收集结果
+- `proxies`: 代理设置
+- `system_proxy`: 是否使用系统代理
+
+## 自定义插件
+
+Animag支持安装自己实现的搜索插件，插件类必须继承`BasePlugin`类，并实现`search()`方法。
+
+### 示例插件
 
 ```python
-# 运行此代码，没有异常说明自定义插件创建成功，已经注册在插件系统中
-from animag.plugins import BasePlugin
-from animag.component.Anime import Anime
-from animag.component.webget import get_html
+# myplugin.py
+# 文件名必须是小写的插件名称
+
+from animag import BasePlugin, Anime, Searcher
+from typing import List, Optional
 
 
-class Custom(BasePlugin):
-    abstract = False
+class MyPlugin(BasePlugin):
+    abstract = False  # 这一行必须设置，否则不会被识别为插件
 
-    def __init__(self, parser, verify, timefmt) -> None:
-        super().__init__(parser, verify, timefmt)
+    def __init__(self,
+                 parser: Optional[str] = None,
+                 verify: Optional[bool] = None,
+                 timefmt: Optional[str] = None):
+        # 插件初始化
+        pass
 
-    def search(self, keyword, collected=True, proxies=None, system_proxy=False, **extra_options):
-        html = get_html("<url>", proxies=proxies, system_proxy=system_proxy, verify=self._verify)
-
-        # 这里实现您的搜索逻辑
-
-        # 返回一个 Anime 对象的列表
-        return [Anime("2023/06/01 12:00", "Custom Anime", "1.5GB", "magnet:?xt=urn:btih:..."), ...]
+    def search(self, keyword: str,
+               collected: Optional[bool] = None,
+               proxies: Optional[dict] = None,
+               system_proxy: Optional[bool] = None,
+               **extra_options) -> List[Anime] | None:
+        # 实现搜索逻辑
+        pass
 ```
 
-### 使用自定义插件示例
+### 安装插件
+
+将自定义插件安装到animag/plugins目录后，在搜索器初始化时，指定插件名称为`myplugin`即可，如果没有安装至此目录，也可以手动将模块导入至命名空间。
 
 ```python
-searcher_custom = AniSearch(plugin_name='custom')
-
-# 如果文件没有放在项目plugins目录下，需要手动将其引入命名空间
-# 请务必将类名（遵守pep8命名规范）、插件名、文件名保持一致，大小写会自动处理
-
-searcher_custom.search("我推的孩子")
+searcher = Searcher(plugin_name='myplugin')
 ```
 
-## 命令行界面（CLI）使用
+## 命令行接口 (CLI)
 
-anisearch 附赠了一个命令行界面，可以直接在终端中使用。
+项目附赠了一个CLI工具，使用 Rich 库实现美观的控制台输出，支持交互式选择。
 
-### 基本用法
+### 命令行参数
 
-```
-anisearch -s <关键词> [选项]
-```
-
-### 参数说明
-
-- `-s`, `--search`: (必需) 搜索关键词
-- `-p`, `--plugin`: (可选) 搜索插件，默认为 `dmhy`
-- `-c`, `--collected`: (可选) 是否只搜索季度合集
-
-### 示例
-
-1. 基本搜索：
-
-```
-anisearch -s "我推的孩子"
+```commandline
+animag [-h] -s SEARCH [-p PLUGIN] [-c]
 ```
 
-2. 使用特定搜索插件搜索：
+#### 必选参数
 
+-s, --search: 搜索关键词
+
+#### 可选参数
+
+- `-h`, `--help`: 显示帮助信息
+- `-p`, `--plugin`: 指定搜索插件（默认：'dmhy'）
+- `-c`, `--collected`: 启用季度全集搜索模式
+
+### 使用示例
+
+```commandline
+
+# 基本搜索
+animag -s "葬送的芙莉莲"
+
+# 使用特定插件搜索
+animag -s "葬送的芙莉莲" -p nyaa
+
+# 搜索季度全集
+animag -s "葬送的芙莉莲" -c
 ```
-anisearch -s "我推的孩子" -p nyaa
-```
 
-### 使用流程
+## 注意事项
 
-1. 运行搜索命令后，程序会显示搜索结果列表，包括序号、标题和文件大小
-2. 用户可以输入想要选择的项目的序号
-3. 如果选择了有效的序号，程序会显示所选项目的标题和磁力链接
-4. 输入 0 可以退出选择过程
-
-## 贡献
-
-欢迎贡献！请随时提交 pull requests 或开启 issues 来改进这个项目
-
-## 许可证
-
-AGPLv3
+1. 目前所有的插件都需要代理才能工作，确保正确配置代理设置
+2. 时间格式必须符合Python的时间格式字符串规范

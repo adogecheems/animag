@@ -16,7 +16,7 @@ setup(
     },
     author='adogecheems',
     author_email='master@mmoe.work',
-    description='A library for searching anime magnet links',
+    description='Anime magnet search library with strong expandability',
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/adogecheems/animag',

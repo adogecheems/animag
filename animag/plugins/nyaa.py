@@ -13,11 +13,20 @@ BASE_URL = "https://nyaa.si/?"
 class Nyaa(BasePlugin):
     abstract = False
 
-    def __init__(self, parser: str = 'lxml', verify: bool = False, timefmt: str = r'%Y/%m/%d %H:%M') -> None:
+    def __init__(self,
+                 parser: str = 'lxml',
+                 verify: bool = False,
+                 timefmt: str = r'%Y/%m/%d %H:%M') -> None:
+
         super().__init__(parser, verify, timefmt)
 
-    def search(self, keyword: str, collected: bool = False, proxies: Optional[dict] = None,
-               system_proxy: bool = False, **extra_options) -> List[Anime] | None:
+    def search(self,
+               keyword: str,
+               collected: bool = False,
+               proxies: Optional[dict] = None,
+               system_proxy: bool = False,
+               **extra_options) -> List[Anime] | None:
+
         animes: List[Anime] = []
         page = 1
         params = {'q': keyword, 'c': "1_0", **extra_options}
