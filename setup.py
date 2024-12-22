@@ -31,5 +31,5 @@ setup(
         'Programming Language :: Python :: 3.11',
         'Programming Language :: Python :: 3.12',
     ],
-    keywords='anime magnet torrent scrape spider rss expandable plugin acgrip dmhy nyaa tokyotosho miobt kisssub comicat',
+    keywords='anime magnet torrent scraper spider rss expandable plugin acgrip dmhy nyaa tokyotoshokan miobt kisssub comicat',
 )
