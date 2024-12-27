@@ -4,7 +4,6 @@ from urllib.parse import urlencode
 
 from bs4 import BeautifulSoup
 
-from . import BasePlugin
 from .. import *
 
 DOMAIN = "https://acg.rip"
@@ -68,6 +67,6 @@ class Acgrip(BasePlugin):
                 page += 1
 
             except Exception as e:
-                raise SearchParserError(f"A error occurred while processing the page of {page} with error {e!r}")
+                raise SearchParserError(f"A error occurred while processing the page of {page} with error {e!r}") from e
 
         return animes

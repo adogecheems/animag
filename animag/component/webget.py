@@ -56,4 +56,4 @@ def get_html(
         return response.content
 
     except RequestException as e:
-        raise SearchRequestError(f"Request failed for URL {url}: {e!r}")
+        raise SearchRequestError(f"Request failed for URL {url}: {e!r}") from e

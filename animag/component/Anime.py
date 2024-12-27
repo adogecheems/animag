@@ -1,6 +1,6 @@
 import re
-from dataclasses import dataclass
 import time
+from dataclasses import dataclass
 from typing import Tuple, Optional
 
 from .. import log, SizeFormatError, TimeFormatError
@@ -70,8 +70,7 @@ class Anime:
         try:
             return time.strftime(to_timefmt, time.strptime(self.time, from_timefmt))
         except Exception as e:
-            raise TimeFormatError(f"Invalid time format: {e!r}")
-
+            raise TimeFormatError(f"Invalid time format: {e!r}") from e
 
     @staticmethod
     def convert_byte(value: float, from_unit: str, to_unit: str) -> Optional[float]:

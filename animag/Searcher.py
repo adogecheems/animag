@@ -14,18 +14,18 @@ class Searcher:
                  timefmt: Optional[str] = None,
                  no_search_errors: bool = False) -> None:
         """
-        Initialize Searcher object.
+        Initialize a Searcher object.
 
         Args:
-            plugin_name: Name of the plugin, default is 'dmhy'
-            parser: Name of the parser
-            verify: Whether to verify
-            timefmt: Time format
-            no_search_errors: If True, search errors will be suppressed
+            plugin_name: The name of the plugin, default is 'dmhy'.
+            parser: The name of the parser to be used.
+            verify: Whether to enable verification.
+            timefmt: The format for time representation.
+            no_search_errors: If True, suppresses search errors.
 
         Raises:
-            ValueError: If time format is invalid
-            PluginImportError: If plugin is not found
+            ValueError: If the provided time format is invalid.
+            PluginImportError: If the specified plugin cannot be found.
         """
         self.timefmt: Optional[str] = None
         self.animes: List[Anime] | None = None
@@ -42,7 +42,7 @@ class Searcher:
                      parser: Optional[str],
                      verify: Optional[bool],
                      timefmt: Optional[str]) -> Any:
-        """Load and configure the search plugin."""
+        """Load and configure the specified search plugin."""
         kwargs: Dict[str, Any] = {}
 
         if parser is not None:
@@ -63,15 +63,15 @@ class Searcher:
         Set and validate the time format.
 
         Args:
-            timefmt: Time format string
+            to_timefmt: The time format string to set.
 
         Raises:
-            TimeFormatError: If time format is invalid
+            TimeFormatError: If the provided time format is invalid.
         """
         try:
             time.strftime(to_timefmt, time.localtime())
         except Exception as e:
-            raise TimeFormatError(f"Invalid time format {to_timefmt} : {e!r}")
+            raise TimeFormatError(f"Invalid time format {to_timefmt}: {e!r}") from e
 
         if self.animes is not None:
             from_timefmt = r'%Y/%m/%d %H:%M' if self.timefmt is None else self.timefmt
@@ -87,21 +87,21 @@ class Searcher:
                system_proxy: Optional[bool] = None,
                **extra_options) -> List[Anime] | None:
         """
-        Search for anime using the given keyword.
+        Search for anime using the specified keyword.
 
         Args:
-            keyword: Search keyword
-            collected: Whether to collect results
-            proxies: Proxy settings
-            system_proxy: Whether to use system proxy
-            **extra_options: Additional search options (as param strings)
+            keyword: The keyword to search for.
+            collected: Whether to collect results.
+            proxies: Proxy settings to use for the search.
+            system_proxy: Whether to use the system's proxy settings.
+            **extra_options: Additional search options provided as keyword arguments.
 
         Returns:
-            List of found animes or None if search fails
+            A list of found anime or None if the search fails.
 
         Raises:
-            SearchRequestError: If search request fails
-            SearchParseError: If search result parsing fails
+            SearchRequestError: If the search request fails.
+            SearchParseError: If parsing the search result fails.
         """
         self.animes = None
 
@@ -123,16 +123,56 @@ class Searcher:
 
         return self.animes
 
+    def get_animes(self) -> List[Anime]:
+        """
+        Retrieve the list of anime from the search results.
+
+        Returns:
+            A list of Anime objects.
+
+        Raises:
+            ValueError: If there are no search results available.
+        """
+        if self.animes is None:
+            raise ValueError("No search results available.")
+
+        return self.animes
+
+    def get_anime(self, index: int) -> Anime:
+        """
+        Retrieve the anime at the specified index in the search results.
+
+        Args:
+            index: The index of the anime to retrieve.
+
+        Returns:
+            The Anime object at the specified index.
+
+        Raises:
+            ValueError: If there are no search results available.
+            IndexError: If the provided index is out of range.
+        """
+        if self.animes is None:
+            raise ValueError("No search results available.")
+
+        if index < 0 or index >= len(self.animes):
+            raise IndexError(f"Index {index} out of range.")
+
+        return self.animes[index]
+
     def size_format_all(self, unit: str = 'MB') -> List[Anime]:
         """
         Convert the size of all anime in the search results to the specified unit.
 
         Args:
-            unit: Target size unit, default is 'MB'
+            unit: The target size unit for conversion, default is 'MB'.
+
+        Returns:
+            A list of Anime objects with their sizes formatted in the specified unit.
 
         Raises:
-            ValueError: If no search results exist
-            SizeFormatError: If size format fails
+            ValueError: If there are no search results available.
+            SizeFormatError: If size formatting fails.
         """
         if self.animes is None:
             raise ValueError("No search results available.")
@@ -153,11 +193,11 @@ class Searcher:
         Save the search results to a CSV file.
 
         Args:
-            filename: Name of the CSV file
+            filename: The name of the CSV file where results will be saved.
 
         Raises:
-            ValueError: If no search results exist
-            SaveCSVError: If saving fails
+            ValueError: If there are no search results available.
+            SaveCSVError: If saving to the CSV file fails.
         """
         if self.animes is None:
             raise ValueError("No search results available.")
@@ -178,7 +218,7 @@ class Searcher:
                     })
 
         except Exception as e:
-            raise SaveCSVError(f"Failed to save CSV file '{filename}': {e!r}")
+            raise SaveCSVError(f"Failed to save CSV file '{filename}': {e!r}") from e
 
 
 if __name__ == "__main__":

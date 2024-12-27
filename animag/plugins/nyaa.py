@@ -4,7 +4,6 @@ from urllib.parse import urlencode
 
 from bs4 import BeautifulSoup
 
-from . import BasePlugin
 from .. import *
 
 BASE_URL = "https://nyaa.si/?"
@@ -67,6 +66,6 @@ class Nyaa(BasePlugin):
 
 
             except Exception as e:
-                raise SearchParserError(f"A error occurred while processing the page of {page} with error {e!r}")
+                raise SearchParserError(f"A error occurred while processing the page of {page} with error {e!r}") from e
 
         return animes
