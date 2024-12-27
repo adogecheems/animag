@@ -57,7 +57,7 @@ class Dmhy(BasePlugin):
 
                     log.debug(f"Successfully got: {title}")
 
-                    animes.append(Anime(release_time, title, size, magnet))
+                    animes.append(Anime(release_time, title, size, magnet, None))
 
                 page += 1
 

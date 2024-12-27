@@ -18,7 +18,6 @@ class Acgrip(BasePlugin):
                  verify: bool = False,
                  timefmt: str = r'%Y/%m/%d %H:%M') -> None:
 
-        log.warning("Using acg.rip searcher can only return torrent download addresses.")
         super().__init__(parser, verify, timefmt)
 
     def search(self,
@@ -32,6 +31,7 @@ class Acgrip(BasePlugin):
         page = 1
 
         params = {'term': keyword, **extra_options}
+
         if collected:
             log.warning("Acg.rip searcher does not support collection.")
 
@@ -55,12 +55,12 @@ class Acgrip(BasePlugin):
                     release_time = time.strftime(self.timefmt, time.localtime(int(release_time)))
 
                     title = tds[1].find_all("a")[-1].get_text(strip=True)
-                    magnet = DOMAIN + tds[2].a["href"]
+                    torrent = DOMAIN + tds[2].a["href"]
                     size = tds[3].string
 
                     log.debug(f"Successfully got the magnet: {title}")
 
-                    animes.append(Anime(release_time, title, size, magnet))
+                    animes.append(Anime(release_time, title, size, None, torrent))
 
                     tr = tr.find_next_sibling("tr")
 

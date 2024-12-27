@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 
 from .. import *
 
+DOMAIN = "https://nyaa.si"
 BASE_URL = "https://nyaa.si/?"
 
 
@@ -54,12 +55,13 @@ class Nyaa(BasePlugin):
                     release_time = time.strftime(self.timefmt, time.strptime(release_time, '%Y-%m-%d %H:%M'))
 
                     title = tds[1].a.get("title")
+                    torrent = DOMAIN + tds[2].find_all("a")[0]["href"]
                     magnet = tds[2].find_all("a")[1]["href"]
                     size = tds[3].string
 
                     log.debug(f"Successfully got: {title}")
 
-                    animes.append(Anime(release_time, title, size, magnet))
+                    animes.append(Anime(release_time, title, size, magnet, torrent))
 
                 page += 1
 

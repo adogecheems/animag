@@ -23,11 +23,21 @@ conversion_factors = {
 
 @dataclass
 class Anime:
-    time: str
-    title: str
-    size: str
-    magnet: str
-    torrent: Optional[str] = None
+    """
+    Data class to represent an anime object.
+
+    Attributes:
+        time (str): The release time of the anime.
+        title (str): The title of the anime.
+        size (str): The size of the anime.
+        magnet (str): The magnet link of the anime.
+        torrent (str): The torrent link of the anime.
+    """
+    time: str | None
+    title: str | None
+    size: str | None
+    magnet: str | None
+    torrent: str | None
 
     def size_format(self, unit: str = 'MB') -> None:
         """

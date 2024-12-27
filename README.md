@@ -1,4 +1,4 @@
-<h1 align="center" style="font-size: 3rem; color: #1772b4">Animag 2.0</h1>
+<h1 align="center" style="font-size: 4rem">Animag 2.0</h1>
 
 ---
 
@@ -34,12 +34,14 @@ from animag import Searcher
 searcher = Searcher(plugin_name='dmhy',
                     no_search_errors=True)
 
-# 搜索动画
-results = searcher.search("葬送的芙莉莲",
-                          collected=True)
+# 搜索动画(代理是假的)
+searcher.search("葬送的芙莉莲",
+                collected=True,
+                proxies={'http': 'http://localhost:6666',
+                         'https': 'http://localhost:6666'})
 
 # 打印搜索结果
-print(results)
+print(searcher.get_animes())
 
 """
 示例输出(2024年12月22日的结果)：
@@ -55,6 +57,37 @@ searcher.size_format_all('MB')
 # 保存结果到CSV文件
 searcher.save_csv("search_results.csv")
 ```
+
+## 支持的插件
+
+| 站点              | 插件名称       | 注意事项               |
+|-----------------|------------|--------------------|
+| dmhy.org        | dmhy       | 速度慢，内容丰富           |
+| nyaa.si         | nyaa       | 速度快，内容丰富，不支持季度全集搜索 |
+| acg.rip         | acgrip     | 速度快，只能返回种子下载链接     |
+| tokyotosho.info | tokyotosho | 速度适中，大部分资源需要用英文搜索  |
+
+以上所有插件都需要代理才能正常工作，确保正确配置代理设置
+
+## 配置选项
+
+### 搜索器初始化选项
+
+- `plugin_name`: 插件名称（默认：'dmhy'）
+- `parser`: 解析器选项
+- `verify`: 验证选项
+- `timefmt`: 时间格式
+- `no_search_errors`: 是否忽略搜索错误
+
+### 搜索选项
+
+- `keyword`: 搜索关键词
+- `collected`: 是否收集结果
+- `proxies`: 代理设置
+- `system_proxy`: 是否使用系统代理
+- `**extra_options`: 额外选项，会并入搜索时的查询字符串
+
+！[]
 
 ## 核心组件
 
@@ -89,13 +122,15 @@ searcher.save_csv("search_results.csv")
 #### 主要方法
 
 - `search()`: 搜索动画资源
+- `get_anime()`: 获取单个动画资源
+- `get_animes()`: 获取所有动画资源
 - `size_format_all()`: 批量转换文件大小单位
 - `save_csv()`: 将搜索结果保存为CSV文件
 - `set_timefmt()`: 设置时间格式
 
-## 错误处理
+### 错误处理
 
-系统定义了多种错误类型：
+库定义了多种错误类型：
 
 - `PluginImportError`: 插件导入错误
 - `SearchRequestError`: 搜索请求错误
@@ -103,23 +138,6 @@ searcher.save_csv("search_results.csv")
 - `SizeFormatError`: 文件大小格式化错误
 - `TimeFormatError`: 时间格式化错误
 - `SaveCSVError`: CSV保存错误
-
-## 配置选项
-
-### 搜索器初始化选项
-
-- `plugin_name`: 插件名称（默认：'dmhy'）
-- `parser`: 解析器选项
-- `verify`: 验证选项
-- `timefmt`: 时间格式
-- `no_search_errors`: 是否忽略搜索错误
-
-### 搜索选项
-
-- `keyword`: 搜索关键词
-- `collected`: 是否收集结果
-- `proxies`: 代理设置
-- `system_proxy`: 是否使用系统代理
 
 ## 自定义插件
 
@@ -159,6 +177,17 @@ class MyPlugin(BasePlugin):
 将自定义插件安装到animag/plugins目录后，在搜索器初始化时，指定插件名称为`myplugin`即可，如果没有安装至此目录，也可以手动将模块导入至命名空间。
 
 ```python
+from animag import Searcher
+
+searcher = Searcher(plugin_name='myplugin')
+```
+
+或者是直接导入插件模块
+
+```python
+import myplugin
+from animag import Searcher
+
 searcher = Searcher(plugin_name='myplugin')
 ```
 
@@ -185,7 +214,6 @@ animag [-h] -s SEARCH [-p PLUGIN] [-c]
 ### 使用示例
 
 ```commandline
-
 # 基本搜索
 animag -s "葬送的芙莉莲"
 

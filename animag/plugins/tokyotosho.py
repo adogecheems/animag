@@ -62,18 +62,21 @@ class Tokyotosho(BasePlugin):
                     top = row[0].find(class_='desc-top')
                     if not top:
                         continue
+
                     title = top.get_text(strip=True)
-                    magnet = top.a['href'] if top.a else None
+                    magnet = top.find("a")['href'] if top.find("a") else None
+                    torrent = top.find_all("a")[1]['href']
 
                     bottom = row[1].find(class_='desc-bot')
                     if not bottom:
                         continue
+
                     size, release_time = extract_info(bottom.text)
                     release_time = time.strftime(self.timefmt, release_time) if release_time else None
 
                     log.debug(f"Successfully got: {title}")
 
-                    animes.append(Anime(release_time, title, size, magnet))
+                    animes.append(Anime(release_time, title, size, magnet, torrent))
 
                 page += 1
 
