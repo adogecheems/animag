@@ -25,13 +25,13 @@ def get_system_proxies() -> Dict[str, str]:
     return proxies
 
 
-def get_html(
+def get_content(
         url: str,
         proxies: Optional[Dict[str, str]] = None,
         system_proxy: bool = False,
         verify: bool = True
 ) -> bytes:
-    """Get HTML content from URL."""
+    """Get content from URL."""
     if not verify:
         requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
@@ -46,12 +46,6 @@ def get_html(
             verify=verify,
             timeout=DEFAULT_TIMEOUT
         )
-
-        if response.status_code != 200:
-            raise SearchRequestError(f"Invalid status code {response.status_code} for URL: {url}")
-
-        if not response.headers.get('Content-Type', '').startswith("text/html"):
-            raise SearchRequestError(f"Invalid content type for URL: {url}")
 
         return response.content
 

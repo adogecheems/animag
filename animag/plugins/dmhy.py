@@ -37,7 +37,7 @@ class Dmhy(BasePlugin):
             log.debug(f"Processing the page of {page}")
 
             url = BASE_URL.format(page) + urlencode(params)
-            html = get_html(url, verify=self._verify, proxies=proxies, system_proxy=system_proxy)
+            html = get_content(url, verify=self._verify, proxies=proxies, system_proxy=system_proxy)
 
             try:
                 bs = BeautifulSoup(html, self._parser)
@@ -48,8 +48,8 @@ class Dmhy(BasePlugin):
 
                 for tr in tbody.find_all("tr"):
                     tds = tr.find_all("td")
-                    release_time = tds[0].span.string
-                    release_time = time.strftime(self.timefmt, time.strptime(release_time, '%Y/%m/%d %H:%M'))
+                    from_time = tds[0].span.string
+                    to_time = time.strftime(self.timefmt, time.strptime(from_time, '%Y/%m/%d %H:%M'))
 
                     title = tds[2].find_all("a")[-1].get_text(strip=True)
                     magnet = tds[3].find(class_="download-arrow")["href"]
@@ -57,7 +57,7 @@ class Dmhy(BasePlugin):
 
                     log.debug(f"Successfully got: {title}")
 
-                    animes.append(Anime(release_time, title, size, magnet, None))
+                    animes.append(Anime(to_time, title, size, magnet, None))
 
                 page += 1
 

@@ -49,7 +49,7 @@ class Tokyotosho(BasePlugin):
 
             params['page'] = page
             url = BASE_URL + urlencode(params)
-            html = get_html(url, verify=self._verify, proxies=proxies, system_proxy=system_proxy)
+            html = get_content(url, verify=self._verify, proxies=proxies, system_proxy=system_proxy)
 
             try:
                 bs = BeautifulSoup(html, self._parser)
@@ -71,12 +71,12 @@ class Tokyotosho(BasePlugin):
                     if not bottom:
                         continue
 
-                    size, release_time = extract_info(bottom.text)
-                    release_time = time.strftime(self.timefmt, release_time) if release_time else None
+                    size, from_time = extract_info(bottom.text)
+                    to_time = time.strftime(self.timefmt, from_time) if from_time else None
 
                     log.debug(f"Successfully got: {title}")
 
-                    animes.append(Anime(release_time, title, size, magnet, torrent))
+                    animes.append(Anime(to_time, title, size, magnet, torrent))
 
                 page += 1
 

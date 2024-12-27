@@ -5,6 +5,10 @@ from typing import List
 from .. import *
 
 
+def format_module_name(name: str):
+    return name.title().replace('_', '')
+
+
 class PluginMeta(ABCMeta):
     plugins = {}
 
@@ -60,4 +64,4 @@ def get_plugin(name: str):
     except:
         raise PluginImportError(f"The plugin {name} cannot be imported, maybe you must import it manually.")
 
-    return PluginMeta.plugins.get(name.title())
+    return PluginMeta.plugins.get(format_module_name(name))

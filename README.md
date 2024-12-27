@@ -149,7 +149,7 @@ Animag支持安装自己实现的搜索插件，插件类必须继承`BasePlugin
 # myplugin.py
 # 文件名必须是小写的插件名称
 
-from animag import BasePlugin, Anime, Searcher
+from animag import BasePlugin, Anime
 from typing import List, Optional
 
 

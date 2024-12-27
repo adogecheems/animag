@@ -39,7 +39,7 @@ class Nyaa(BasePlugin):
 
             params['p'] = page
             url = BASE_URL + urlencode(params)
-            html = get_html(url, verify=self._verify, proxies=proxies, system_proxy=system_proxy)
+            html = get_content(url, verify=self._verify, proxies=proxies, system_proxy=system_proxy)
 
             try:
                 bs = BeautifulSoup(html, self._parser)
@@ -51,8 +51,8 @@ class Nyaa(BasePlugin):
                 for tr in tbody.find_all("tr"):
                     tds = tr.find_all("td")
 
-                    release_time = tds[4].string
-                    release_time = time.strftime(self.timefmt, time.strptime(release_time, '%Y-%m-%d %H:%M'))
+                    from_time = tds[4].string
+                    to_time = time.strftime(self.timefmt, time.strptime(from_time, '%Y-%m-%d %H:%M'))
 
                     title = tds[1].a.get("title")
                     torrent = DOMAIN + tds[2].find_all("a")[0]["href"]
@@ -61,7 +61,7 @@ class Nyaa(BasePlugin):
 
                     log.debug(f"Successfully got: {title}")
 
-                    animes.append(Anime(release_time, title, size, magnet, torrent))
+                    animes.append(Anime(to_time, title, size, magnet, torrent))
 
                 page += 1
 

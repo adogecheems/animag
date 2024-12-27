@@ -7,17 +7,16 @@ from bs4 import BeautifulSoup
 from .. import *
 
 DOMAIN = "https://acg.rip"
-BASE_URL = "https://acg.rip/page/{}?"
+BASE_URL = "https://acg.rip/page/{}.xml?"
 
 
-class Acgrip(BasePlugin):
+class AcgripRss(BasePlugin):
     abstract = False
 
     def __init__(self,
                  parser: str = 'lxml',
                  verify: bool = False,
                  timefmt: str = r'%Y/%m/%d %H:%M') -> None:
-
         super().__init__(parser, verify, timefmt)
 
     def search(self,
@@ -43,30 +42,26 @@ class Acgrip(BasePlugin):
 
             try:
                 bs = BeautifulSoup(html, self._parser)
-                tr = bs.thead.find_next_sibling("tr")
+                items = bs.find_all("item")
 
-                if tr is None:
+                if not items:
                     break
 
-                while tr:
-                    tds = tr.find_all("td")
+                for item in items:
+                    title = item.find("title").text
+                    link = item.find("link").text
 
-                    from_time = tds[0].find_all("div")[1].time.get("datetime")
-                    to_time = time.strftime(self.timefmt, time.localtime(int(from_time)))
+                    from_time = item.find("pubDate").text
+                    to_time = time.strftime(self.timefmt, time.strptime(from_time, "%a, %d %b %Y %H:%M:%S %z"))
 
-                    title = tds[1].find_all("a")[-1].get_text(strip=True)
-                    torrent = DOMAIN + tds[2].a["href"]
-                    size = tds[3].string
+                    log.debug(f"Successfully got the RSS item: {title}")
 
-                    log.debug(f"Successfully got the magnet: {title}")
-
-                    animes.append(Anime(to_time, title, size, None, torrent))
-
-                    tr = tr.find_next_sibling("tr")
+                    animes.append(Anime(to_time, title, None, None, link))
 
                 page += 1
 
             except Exception as e:
-                raise SearchParserError(f"A error occurred while processing the page of {page} with error {e!r}") from e
+                raise SearchParserError(
+                    f"An error occurred while processing the page of {page} with error {e!r}") from e
 
         return animes
