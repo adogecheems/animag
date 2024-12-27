@@ -202,7 +202,7 @@ class Searcher:
         if self.animes is None:
             raise ValueError("No search results available.")
 
-        fieldnames = ["time", "title", "size", "magnet"]
+        fieldnames = ["time", "title", "size", "magnet", "torrent"]
 
         try:
             with open(filename, mode='w', newline='', encoding='utf-8') as f:
@@ -211,10 +211,11 @@ class Searcher:
 
                 for anime in self.animes:
                     writer.writerow({
-                        "time": anime.time,
-                        "title": anime.title,
-                        "size": anime.size,
-                        "magnet": anime.magnet
+                        "time": anime.time if anime.time else "Unknown",
+                        "title": anime.title if anime.title else "Unknown",
+                        "size": anime.size if anime.size else "Unknown",
+                        "magnet": anime.magnet if anime.magnet else "Unknown",
+                        "torrent": anime.torrent if anime.torrent else "Unknown"
                     })
 
         except Exception as e:
