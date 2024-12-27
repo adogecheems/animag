@@ -54,7 +54,7 @@ class Nyaa(BasePlugin):
                     release_time = time.strftime(self.timefmt, time.strptime(release_time, '%Y-%m-%d %H:%M'))
 
                     title = tds[1].a.get("title")
-                    magnet = tds[2].find_all("a")[1].get("href")
+                    magnet = tds[2].find_all("a")[1]["href"]
                     size = tds[3].string
 
                     log.debug(f"Successfully got: {title}")
@@ -62,8 +62,6 @@ class Nyaa(BasePlugin):
                     animes.append(Anime(release_time, title, size, magnet))
 
                 page += 1
-
-
 
             except Exception as e:
                 raise SearchParserError(f"A error occurred while processing the page of {page} with error {e!r}") from e

@@ -77,8 +77,6 @@ class Tokyotosho(BasePlugin):
 
                 page += 1
 
-
-
             except Exception as e:
                 raise SearchParserError(f"A error occurred while processing the page of {page} with error {e!r}") from e
 
