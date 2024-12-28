@@ -1,4 +1,5 @@
 import time
+from os import wait
 from typing import List
 from urllib.parse import urlencode
 
@@ -8,13 +9,8 @@ from .. import *
 
 DOMAIN = "https://acg.rip"
 BASE_URL = "https://acg.rip/page/{}.xml?"
-import time
-from typing import List
-from urllib.parse import urlencode
+MAX_PAGE = 5
 
-from bs4 import BeautifulSoup
-
-from .. import *
 
 class AcgripRss(BasePlugin):
     abstract = False
@@ -51,6 +47,9 @@ class AcgripRss(BasePlugin):
             xml = get_content(url, verify=self._verify, proxies=proxies, system_proxy=system_proxy)
 
             try:
+                if page > MAX_PAGE:
+                    break
+
                 bs = BeautifulSoup(xml, features="xml")
                 items = bs.find_all("item")
 
@@ -69,6 +68,7 @@ class AcgripRss(BasePlugin):
                     animes.append(Anime(to_time, title, None, None, torrent))
 
                 page += 1
+                time.sleep(1)
 
             except Exception as e:
                 raise SearchParserError(

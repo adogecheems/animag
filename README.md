@@ -62,18 +62,18 @@ searcher.save_csv("search_results.csv")
 
 ## 支持的插件
 
-|         站点          |      插件名称      | 速度 | 季度全集搜索 | size | magnet | torrent |
-|:-------------------:|:--------------:|:--:|:------:|:----:|:------:|:-------:|
-|      dmhy.org       |      dmhy      | 较慢 |   ✅    |  ✅   |   ✅    |    ❎    |
-|      dmhy.org       |    dmhy_rss    | 适中 |   ✅    |  ❎   |   ✅    |    ❎    |
-|       nyaa.si       |      nyaa      | 快  |   ❎    |  ✅   |   ✅    |    ✅    |
-|       nyaa.si       |    nyaa_rss    | 快  |   ❎    |  ✅   |   ✅    |    ✅    |
-|       acg.rip       |     acgrip     | 较快 |   ❎    |  ✅   |   ❎    |    ✅    |
-|       acg.rip       |   acgrip_rss   | 快  |   ❎    |  ❎   |   ❎    |    ✅    |
-| www.tokyotosho.info |   tokyotosho   | 较快 |   ❎    |  ✅   |   ✅    |    ✅    |
-| www.tokyotosho.info | tokyotosho_rss | 快  |   ❎    |  ✅   |   ✅    |    ✅    |
-|   animetosho.org    |   animetosho   | 较快 |   ❎    |  ✅   |   ✅    |    ✅    |
-|   animetosho.org    | animetosho_rss | 快  |   ❎    |  ✅   |   ✅    |    ✅    |
+|         站点          |     插件参数名称     | 速度 | 季度全集搜索 | size | magnet | torrent |                          注意事项                           |
+|:-------------------:|:--------------:|:--:|:------:|:----:|:------:|:-------:|:-------------------------------------------------------:|
+|      dmhy.org       |      dmhy      | 较慢 |   ✅    |  ✅   |   ✅    |    ❎    |                            无                            |
+|      dmhy.org       |    dmhy_rss    | 适中 |   ✅    |  ❎   |   ✅    |    ❎    |                            无                            |
+|       nyaa.si       |      nyaa      | 快  |   ❎    |  ✅   |   ✅    |    ✅    |                            无                            |
+|       nyaa.si       |    nyaa_rss    | 快  |   ❎    |  ✅   |   ✅    |    ✅    |                            无                            |
+|       acg.rip       |     acgrip     | 较快 |   ❎    |  ✅   |   ❎    |    ✅    |                            无                            |
+|       acg.rip       |   acgrip_rss   | 快  |   ❎    |  ❎   |   ❎    |    ✅    | 设置的最大搜索页数是5页，因为多了会被服务器阻断<br/>可以自行修改模块的`MAX_PAGE`，不建议超过9 |
+| www.tokyotosho.info |   tokyotosho   | 较快 |   ❎    |  ✅   |   ✅    |    ✅    |                        需要英文/日文搜索                        |
+| www.tokyotosho.info | tokyotosho_rss | 快  |   ❎    |  ✅   |   ✅    |    ✅    |                        需要英文/日文搜索                        |
+|   animetosho.org    |   animetosho   | 较快 |   ❎    |  ✅   |   ✅    |    ✅    |                         需要英文搜索                          |
+|   animetosho.org    | animetosho_rss | 快  |   ❎    |  ✅   |   ✅    |    ✅    |                         需要英文搜索                          |
 
 以上所有插件都需要代理才能正常工作，确保正确配置代理设置
 
@@ -81,11 +81,11 @@ searcher.save_csv("search_results.csv")
 
 ### 搜索器初始化选项
 
-- `plugin_name`: 插件名称（默认：'dmhy'）
-- `parser`: 解析器选项，RSS插件无需提供
-- `verify`: 验证选项
-- `timefmt`: 时间格式
-- `no_search_errors`: 是否忽略搜索错误
+- `plugin_name`: 插件名称，默认：'dmhy'
+- `parser`: 解析器选项，RSS插件无需提供，默认：'lxml'
+- `verify`: 验证选项，是否验证SSL证书，默认：True
+- `timefmt`: 时间格式，默认：'%Y/%m/%d %H:%M'
+- `no_search_errors`: 是否忽略搜索错误，默认：False
 
 ### 搜索选项
 
@@ -108,7 +108,7 @@ searcher.save_csv("search_results.csv")
 - `size`: 文件大小
 - `magnet`: 磁力链接
 - `torrent`: 种子链接
-- `hash`: 磁力链接的哈希值
+- `hash`: 磁力链接的哈希值，如果不存在magnet则其不存在
 
 #### 主要方法
 
@@ -144,6 +144,7 @@ searcher.save_csv("search_results.csv")
 - `SearchParseError`: 搜索结果解析错误
 - `SizeFormatError`: 文件大小格式化错误
 - `TimeFormatError`: 时间格式化错误
+- `HashExtractError`: 磁力链接哈希提取错误
 - `SaveCSVError`: CSV保存错误
 
 ## 自定义插件

@@ -26,10 +26,6 @@ class SizeFormatError(SearchError):
     pass
 
 
-class PluginImportError(SearchError):
-    pass
-
-
 class TimeFormatError(SearchError):
     pass
 
@@ -37,6 +33,9 @@ class TimeFormatError(SearchError):
 class HashExtractError(SearchError):
     pass
 
+
+class PluginImportError(SearchError):
+    pass
 
 def no_errors(func):
     @functools.wraps(func)

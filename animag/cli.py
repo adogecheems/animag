@@ -32,6 +32,7 @@ def get_user_selection(max_index: int) -> int:
             if 0 <= index <= max_index:
                 return index
             console.print(f"[bold red]请输入 0 到 {max_index} 之间的数字[/bold red]")
+
         except (ValueError, IndexError):
             console.print("[bold red]请输入有效的数字[/bold red]")
 
@@ -56,7 +57,11 @@ def main() -> None:
         if selection > 0:
             anime = animes[selection]
             console.print(f"[bold green]已选择 {anime.title}[/bold green]")
-            console.print(f"[bold green]其磁链为: [/bold green][bold yellow]{anime.magnet}[/bold yellow]")
+            console.print("[bold green]其磁链为: [/bold green][bold yellow]"
+                          f"{anime.magnet if anime.magnet else "空"}[/bold yellow]")
+            console.print("[bold green]其种子链接为: [/bold green][bold yellow]"
+                          f"{anime.torrent if anime.torrent else "空"}[/bold yellow]")
+
         else:
             console.print("[bold yellow]已退出选择[/bold yellow]")
     else:
