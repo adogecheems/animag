@@ -34,6 +34,10 @@ class TimeFormatError(SearchError):
     pass
 
 
+class HashExtractError(SearchError):
+    pass
+
+
 def no_errors(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):

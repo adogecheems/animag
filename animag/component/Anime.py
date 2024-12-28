@@ -1,12 +1,14 @@
 import re
 import time
+from base64 import b32decode
+from binascii import hexlify
 from dataclasses import dataclass
 from typing import Tuple, Optional
 
-from .. import log, SizeFormatError, TimeFormatError
+from .. import log, SizeFormatError, TimeFormatError, HashExtractError
 
 size_pattern = re.compile(r'^(\d+(?:\.\d+)?)\s*(\w+)$')
-magnet_hash_pattern = re.compile(r'btih:([a-fA-F0-9]+)')
+magnet_hash_pattern = re.compile(r'btih:([a-fA-F0-9]{40}|[A-Z0-9]{32})')
 
 conversion_factors = {
     'B': 1,
@@ -38,6 +40,11 @@ class Anime:
     size: str | None
     magnet: str | None
     torrent: str | None
+    hash: str | None = None
+
+    def __post_init__(self):
+        if self.hash is None and self.magnet:
+            self.hash = self._get_hash(self.magnet)
 
     def size_format(self, unit: str = 'MB') -> None:
         """
@@ -150,18 +157,6 @@ class Anime:
             log.error("Magnet hash extraction failed.")
             return False
 
-    def __hash__(self) -> int:
-        """
-        Calculate hash value for the Anime object.
-
-        Returns:
-            int: Hash value based on the magnet hash.
-        """
-        try:
-            return hash(self._get_hash(self.magnet))
-        except AttributeError:
-            return hash(self.magnet)
-
     def __str__(self) -> str:
         """
         Return a string representation of the Anime object.
@@ -186,7 +181,14 @@ class Anime:
             str: The lowercase hash value.
 
         Raises:
-            AttributeError: If hash extraction fails.
+            HashExtractError: If hash extraction fails.
         """
         match = magnet_hash_pattern.search(magnet)
-        return match.group(1).lower()
+        if not match:
+            raise HashExtractError(f"Failed to extract hash from magnet link: {magnet}")
+
+        hash_value = match.group(1)
+        if len(hash_value) == 32:
+            hash_value = hexlify(b32decode(hash_value + '=' * (-len(hash_value) % 8))).decode()
+
+        return hash_value.lower()

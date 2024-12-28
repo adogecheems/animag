@@ -8,15 +8,25 @@ from .. import *
 
 DOMAIN = "https://acg.rip"
 BASE_URL = "https://acg.rip/page/{}.xml?"
+import time
+from typing import List
+from urllib.parse import urlencode
 
+from bs4 import BeautifulSoup
+
+from .. import *
 
 class AcgripRss(BasePlugin):
     abstract = False
 
     def __init__(self,
-                 parser: str = 'lxml',
+                 parser: str = None,
                  verify: bool = False,
                  timefmt: str = r'%Y/%m/%d %H:%M') -> None:
+
+        if parser:
+            log.warning("RSS feed does not need a parser, it will be ignored.")
+
         super().__init__(parser, verify, timefmt)
 
     def search(self,
@@ -38,10 +48,10 @@ class AcgripRss(BasePlugin):
             log.debug(f"Processing the page of {page}")
 
             url = BASE_URL.format(page) + urlencode(params)
-            html = get_content(url, verify=self._verify, proxies=proxies, system_proxy=system_proxy)
+            xml = get_content(url, verify=self._verify, proxies=proxies, system_proxy=system_proxy)
 
             try:
-                bs = BeautifulSoup(html, self._parser)
+                bs = BeautifulSoup(xml, features="xml")
                 items = bs.find_all("item")
 
                 if not items:
@@ -49,14 +59,14 @@ class AcgripRss(BasePlugin):
 
                 for item in items:
                     title = item.find("title").text
-                    link = item.find("link").text
+                    magnet = item.find("link").text
 
                     from_time = item.find("pubDate").text
                     to_time = time.strftime(self.timefmt, time.strptime(from_time, "%a, %d %b %Y %H:%M:%S %z"))
 
                     log.debug(f"Successfully got the RSS item: {title}")
 
-                    animes.append(Anime(to_time, title, None, None, link))
+                    animes.append(Anime(to_time, title, None, None, magnet))
 
                 page += 1
 

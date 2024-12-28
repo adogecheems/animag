@@ -64,7 +64,7 @@ class Tokyotosho(BasePlugin):
                         continue
 
                     title = top.get_text(strip=True)
-                    magnet = top.find("a")['href'] if top.find("a") else None
+                    magnet = top.find("a")['href']
                     torrent = top.find_all("a")[1]['href']
 
                     bottom = row[1].find(class_='desc-bot')

@@ -29,7 +29,8 @@ def get_content(
         url: str,
         proxies: Optional[Dict[str, str]] = None,
         system_proxy: bool = False,
-        verify: bool = True
+        verify: bool = True,
+        fake_user_agent: bool = True
 ) -> bytes:
     """Get content from URL."""
     if not verify:
@@ -41,11 +42,14 @@ def get_content(
     try:
         response = requests.get(
             url,
-            headers=DEFAULT_HEADERS,
+            headers=DEFAULT_HEADERS if fake_user_agent else None,
             proxies=proxies,
             verify=verify,
             timeout=DEFAULT_TIMEOUT
         )
+
+        if response.status_code not in (200, 302):
+            raise SearchRequestError(f"Invalid status code {response.status_code} for URL: {url}")
 
         return response.content
 
