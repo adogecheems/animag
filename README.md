@@ -1,5 +1,20 @@
 <h1 align="center" style="font-size: 4rem">Animag 2.0</h1>
 
+<p align="center">
+    <a href="https://pypi.org/project/animag/">
+        <img src="https://img.shields.io/pypi/v/animag?style=for-the-badge" alt="PyPI">
+    </a>
+    <a href="https://github.com/adogecheems/animag/blob/main/LICENSE">
+        <img src="https://img.shields.io/github/license/adogecheems/animag?style=for-the-badge" alt="License">
+    </a>
+    <a href="https://pypi.org/project/animag/">
+        <img src="https://img.shields.io/pypi/dm/animag?style=for-the-badge" alt="Downloads">
+    </a>
+</p>
+<p align="center">
+    <a href="https://github.com/adogecheems/animag/blob/master/README_en.md">English Version</a>
+</p>
+
 ---
 
 ## 项目概述
@@ -7,6 +22,8 @@
 一个用于搜索动漫磁力链接与种子的Python库，拥有强大的可扩展性。
 
 支持通过插件系统从不同来源搜索动画资源，并能够处理磁力链接、文件大小转换等功能。
+
+使用过旧版本的用户注意，项目名称发生了改变，请务必重新安装。同时由于2.0版本的重构，部分API可能发生变化，建议查看文档。
 
 ## 主要特性
 
