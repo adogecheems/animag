@@ -4,7 +4,7 @@
     <a href="https://pypi.org/project/animag/">
         <img src="https://img.shields.io/pypi/v/animag?style=for-the-badge" alt="PyPI">
     </a>
-    <a href="https://github.com/adogecheems/animag/blob/main/LICENSE">
+    <a href="https://github.com/adogecheems/animag/blob/master/LICENSE">
         <img src="https://img.shields.io/github/license/adogecheems/animag?style=for-the-badge" alt="License">
     </a>
     <a href="https://pypi.org/project/animag/">
