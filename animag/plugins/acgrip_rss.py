@@ -59,14 +59,14 @@ class AcgripRss(BasePlugin):
 
                 for item in items:
                     title = item.find("title").text
-                    magnet = item.find("link").text
+                    torrent = item.find("link").text
 
                     from_time = item.find("pubDate").text
                     to_time = time.strftime(self.timefmt, time.strptime(from_time, "%a, %d %b %Y %H:%M:%S %z"))
 
                     log.debug(f"Successfully got the RSS item: {title}")
 
-                    animes.append(Anime(to_time, title, None, None, magnet))
+                    animes.append(Anime(to_time, title, None, None, torrent))
 
                 page += 1
 

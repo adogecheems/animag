@@ -54,11 +54,12 @@ class NyaaRss(BasePlugin):
                 to_time = time.strftime(self.timefmt, time.strptime(from_time, "%a, %d %b %Y %H:%M:%S %z"))
 
                 info_hash = item.find("nyaa:infoHash").text
+                magnet = f"magnet:?xt=urn:btih:{info_hash}&tr=http%3A%2F%2Fnyaa.tracker.wf%3A7777%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce"
                 size = item.find("nyaa:size").text
 
                 log.debug(f"Successfully got the RSS item: {title}")
 
-                animes.append(Anime(to_time, title, size, None, torrent, info_hash))
+                animes.append(Anime(to_time, title, size, magnet, torrent, info_hash))
 
         except Exception as e:
             raise SearchParserError(f"An error occurred while processing the RSS feed with error {e!r}") from e

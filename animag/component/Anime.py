@@ -153,7 +153,7 @@ class Anime:
 
         try:
             return self._get_hash(self.magnet) == self._get_hash(other.magnet)
-        except AttributeError:
+        except HashExtractError:
             log.error("Magnet hash extraction failed.")
             return False
 
@@ -166,8 +166,9 @@ class Anime:
         """
         try:
             hash_value = self._get_hash(self.magnet)
-        except AttributeError:
+        except HashExtractError:
             hash_value = "unknown"
+
         return f"Anime '{self.title}' with hash {hash_value}"
 
     def _get_hash(self, magnet: str) -> str:

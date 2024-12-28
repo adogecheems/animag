@@ -42,16 +42,22 @@ class TokyotoshoRss(BasePlugin):
             items = bs.find_all("item")
 
             for item in items:
+                if item.find("category").text != "Anime":
+                    continue
+
                 title = item.find("title").text
+                torrent = item.find("link").text
+
+                description = item.find("description").text
+                magnet = description.split('href="')[2].split('"')[0]
+                size = description.split("Size: ")[1].split("<br")[0]
 
                 from_time = item.find("pubDate").text
-                to_time = time.strftime(self.timefmt, time.strptime(from_time, "%a, %d %b %Y %H:%M:%S %z"))
-
-                magnet = item.find("link").text
+                to_time = time.strftime(self.timefmt, time.strptime(from_time, "%a, %d %b %Y %H:%M:%S %Z"))
 
                 log.debug(f"Successfully got the RSS item: {title}")
 
-                animes.append(Anime(to_time, title, None, magnet, None))
+                animes.append(Anime(to_time, title, size, magnet, torrent))
 
         except Exception as e:
             raise SearchParserError(
