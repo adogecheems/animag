@@ -43,9 +43,9 @@ class DmhyRss(BasePlugin):
             items = bs.find_all("item")
 
             for item in items:
-                title = item.find("title").text
+                title = item.find("title").string
 
-                from_time = item.find("pubDate").text
+                from_time = item.find("pubDate").string
                 to_time = time.strftime(self.timefmt, time.strptime(from_time, "%a, %d %b %Y %H:%M:%S %z"))
 
                 magnet = item.find("enclosure")["url"]

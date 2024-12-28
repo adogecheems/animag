@@ -6,7 +6,7 @@ import requests
 from requests import RequestException
 from urllib3.exceptions import InsecureRequestWarning
 
-from .. import SearchRequestError
+from .. import SearchRequestError, log
 
 DEFAULT_TIMEOUT = 10
 DEFAULT_HEADERS = {
@@ -47,6 +47,7 @@ def get_content(
             verify=verify,
             timeout=DEFAULT_TIMEOUT
         )
+        log.debug(f"A request was made to {url}")
 
         if response.status_code not in (200, 302):
             raise SearchRequestError(f"Invalid status code {response.status_code} for URL: {url}")

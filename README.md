@@ -4,7 +4,7 @@
 
 ## 项目概述
 
-一个用于搜索动漫磁力链接与种子的Python库。它拥有强大的可扩展性， 支持通过插件系统从不同来源搜索动画资源，并能够处理磁力链接、文件大小转换等功能。
+一个用于搜索动漫磁力链接与种子的Python库，拥有强大的可扩展性。 支持通过插件系统从不同来源搜索动画资源，并能够处理磁力链接、文件大小转换等功能。
 
 ## 主要特性
 
@@ -34,7 +34,7 @@ from animag import Searcher
 searcher = Searcher(plugin_name='dmhy',
                     no_search_errors=True)
 
-# 搜索动画(代理是假的)
+# 搜索动画(代理仅作为演示)
 searcher.search("葬送的芙莉莲",
                 collected=True,
                 proxies={'http': 'http://localhost:6666',
@@ -60,12 +60,18 @@ searcher.save_csv("search_results.csv")
 
 ## 支持的插件
 
-| 站点              | 插件名称       | 注意事项               |
-|-----------------|------------|--------------------|
-| dmhy.org        | dmhy       | 速度慢，内容丰富           |
-| nyaa.si         | nyaa       | 速度快，内容丰富，不支持季度全集搜索 |
-| acg.rip         | acgrip     | 速度快，只能返回种子下载链接     |
-| tokyotosho.info | tokyotosho | 速度适中，大部分资源需要用英文搜索  |
+| 站点                  | 插件名称           | 速度 | 季度全集搜索 | size | magnet | torrent |
+|:--------------------|:---------------|:---|:-------|------|--------|---------|
+| dmhy.org            | dmhy           | 较慢 | ✅      | ✅    | ✅      | ❎       |
+| dmhy.org            | dmhy_rss       | 适中 | ✅      | ❎    | ✅      | ❎       |
+| nyaa.si             | nyaa           | 快  | ❎      | ✅    | ✅      | ✅       |
+| nyaa.si             | nyaa_rss       | 快  | ❎      | ✅    | ✅      | ✅       |
+| acg.rip             | acgrip         | 较快 | ❎      | ✅    | ❎      | ✅       |
+| acg.rip             | acgrip_rss     | 快  | ❎      | ❎    | ❎      | ✅       |
+| www.tokyotosho.info | tokyotosho     | 较快 | ❎      | ✅    | ✅      | ✅       |
+| www.tokyotosho.info | tokyotosho_rss | 快  | ❎      | ✅    | ✅      | ✅       |
+| animetosho.org      | animetosho     | 较快 | ❎      | ✅    | ✅      | ✅       |
+| animetosho.org      | animetosho_rss | 快  | ❎      | ✅    | ✅      | ✅       |
 
 以上所有插件都需要代理才能正常工作，确保正确配置代理设置
 
@@ -87,8 +93,6 @@ searcher.save_csv("search_results.csv")
 - `system_proxy`: 是否使用系统代理
 - `**extra_options`: 额外选项，会并入搜索时的查询字符串
 
-！[]
-
 ## 核心组件
 
 ### Anime类
@@ -102,6 +106,7 @@ searcher.save_csv("search_results.csv")
 - `size`: 文件大小
 - `magnet`: 磁力链接
 - `torrent`: 种子链接
+- `hash`: 磁力链接的哈希值
 
 #### 主要方法
 

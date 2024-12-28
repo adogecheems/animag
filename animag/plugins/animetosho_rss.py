@@ -1,16 +1,29 @@
 import time
-from typing import List
+import re
+from typing import List, Optional
 from urllib.parse import urlencode
 
 from bs4 import BeautifulSoup
 
 from .. import *
 
-DOMAIN = "https://nyaa.si"
-BASE_URL = "https://nyaa.si/?page=rss&"
+BASE_URL = "https://feed.animetosho.org/rss2?"
 
 
-class NyaaRss(BasePlugin):
+def extract_info(content: str) -> tuple:
+    size_match = re.search(r"Total Size</strong>: ([\d.]+ \w+)", content)
+    size = size_match.group(1) if size_match else "Unknown"
+
+    torrent_match = re.search(r"href=\"(https://storage\.animetosho\.org/torrent/[^\"]+)\"", content)
+    torrent = torrent_match.group(1) if torrent_match else "Unknown"
+
+    magnet_match = re.search(r"href=\"(magnet:[^\"]+)\"", content)
+    magnet = magnet_match.group(1) if magnet_match else "Unknown"
+
+    return size, torrent, magnet
+
+
+class AnimetoshoRss(BasePlugin):
     abstract = False
 
     def __init__(self,
@@ -31,10 +44,12 @@ class NyaaRss(BasePlugin):
                **extra_options) -> List[Anime] | None:
 
         animes: List[Anime] = []
-        params = {'q': keyword, 'c': "1_0", **extra_options}
+        params = {'terms': keyword, **extra_options}
 
         if collected:
-            log.warning("Nyaa RSS search does not support collection.")
+            log.warning("Animetosho RSS search does not support collection.")
+
+        log.debug(f"Processing the page of 1")
 
         url = BASE_URL + urlencode(params)
         xml = get_content(url, verify=self._verify, proxies=proxies, system_proxy=system_proxy)
@@ -43,25 +58,21 @@ class NyaaRss(BasePlugin):
             bs = BeautifulSoup(xml, features="xml")
             items = bs.find_all("item")
 
-            if not items:
-                return None
-
             for item in items:
                 title = item.find("title").string
-                torrent = item.find("link").string
+                description = item.find("description").text
+
+                size, torrent, magnet = extract_info(description)
 
                 from_time = item.find("pubDate").string
                 to_time = time.strftime(self.timefmt, time.strptime(from_time, "%a, %d %b %Y %H:%M:%S %z"))
 
-                info_hash = item.find("nyaa:infoHash").string
-                magnet = f"magnet:?xt=urn:btih:{info_hash}&tr=http%3A%2F%2Fnyaa.tracker.wf%3A7777%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce"
-                size = item.find("nyaa:size").string
-
                 log.debug(f"Successfully got the RSS item: {title}")
 
-                animes.append(Anime(to_time, title, size, magnet, torrent, info_hash))
+                animes.append(Anime(to_time, title, size, magnet, torrent))
 
         except Exception as e:
-            raise SearchParserError(f"An error occurred while processing the RSS feed with error {e!r}") from e
+            raise SearchParserError(
+                f"An error occurred while processing the page of 1 with error {e!r}") from e
 
         return animes

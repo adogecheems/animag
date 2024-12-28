@@ -32,6 +32,9 @@ class TokyotoshoRss(BasePlugin):
         animes: List[Anime] = []
         params = {'terms': keyword, **extra_options}
 
+        if collected:
+            log.warning("Tokyotosho RSS search does not support collection.")
+
         log.debug(f"Processing the page of 1")
 
         url = BASE_URL + urlencode(params)
@@ -45,14 +48,14 @@ class TokyotoshoRss(BasePlugin):
                 if item.find("category").text != "Anime":
                     continue
 
-                title = item.find("title").text
-                torrent = item.find("link").text
+                title = item.find("title").string
+                torrent = item.find("link").string
 
                 description = item.find("description").text
                 magnet = description.split('href="')[2].split('"')[0]
                 size = description.split("Size: ")[1].split("<br")[0]
 
-                from_time = item.find("pubDate").text
+                from_time = item.find("pubDate").string
                 to_time = time.strftime(self.timefmt, time.strptime(from_time, "%a, %d %b %Y %H:%M:%S %Z"))
 
                 log.debug(f"Successfully got the RSS item: {title}")
