@@ -4,7 +4,9 @@
 
 ## 项目概述
 
-一个用于搜索动漫磁力链接与种子的Python库，拥有强大的可扩展性。 支持通过插件系统从不同来源搜索动画资源，并能够处理磁力链接、文件大小转换等功能。
+一个用于搜索动漫磁力链接与种子的Python库，拥有强大的可扩展性。
+
+支持通过插件系统从不同来源搜索动画资源，并能够处理磁力链接、文件大小转换等功能。
 
 ## 主要特性
 
@@ -60,18 +62,18 @@ searcher.save_csv("search_results.csv")
 
 ## 支持的插件
 
-| 站点                  | 插件名称           | 速度 | 季度全集搜索 | size | magnet | torrent |
-|:--------------------|:---------------|:---|:-------|------|--------|---------|
-| dmhy.org            | dmhy           | 较慢 | ✅      | ✅    | ✅      | ❎       |
-| dmhy.org            | dmhy_rss       | 适中 | ✅      | ❎    | ✅      | ❎       |
-| nyaa.si             | nyaa           | 快  | ❎      | ✅    | ✅      | ✅       |
-| nyaa.si             | nyaa_rss       | 快  | ❎      | ✅    | ✅      | ✅       |
-| acg.rip             | acgrip         | 较快 | ❎      | ✅    | ❎      | ✅       |
-| acg.rip             | acgrip_rss     | 快  | ❎      | ❎    | ❎      | ✅       |
-| www.tokyotosho.info | tokyotosho     | 较快 | ❎      | ✅    | ✅      | ✅       |
-| www.tokyotosho.info | tokyotosho_rss | 快  | ❎      | ✅    | ✅      | ✅       |
-| animetosho.org      | animetosho     | 较快 | ❎      | ✅    | ✅      | ✅       |
-| animetosho.org      | animetosho_rss | 快  | ❎      | ✅    | ✅      | ✅       |
+|         站点          |      插件名称      | 速度 | 季度全集搜索 | size | magnet | torrent |
+|:-------------------:|:--------------:|:--:|:------:|:----:|:------:|:-------:|
+|      dmhy.org       |      dmhy      | 较慢 |   ✅    |  ✅   |   ✅    |    ❎    |
+|      dmhy.org       |    dmhy_rss    | 适中 |   ✅    |  ❎   |   ✅    |    ❎    |
+|       nyaa.si       |      nyaa      | 快  |   ❎    |  ✅   |   ✅    |    ✅    |
+|       nyaa.si       |    nyaa_rss    | 快  |   ❎    |  ✅   |   ✅    |    ✅    |
+|       acg.rip       |     acgrip     | 较快 |   ❎    |  ✅   |   ❎    |    ✅    |
+|       acg.rip       |   acgrip_rss   | 快  |   ❎    |  ❎   |   ❎    |    ✅    |
+| www.tokyotosho.info |   tokyotosho   | 较快 |   ❎    |  ✅   |   ✅    |    ✅    |
+| www.tokyotosho.info | tokyotosho_rss | 快  |   ❎    |  ✅   |   ✅    |    ✅    |
+|   animetosho.org    |   animetosho   | 较快 |   ❎    |  ✅   |   ✅    |    ✅    |
+|   animetosho.org    | animetosho_rss | 快  |   ❎    |  ✅   |   ✅    |    ✅    |
 
 以上所有插件都需要代理才能正常工作，确保正确配置代理设置
 
@@ -80,7 +82,7 @@ searcher.save_csv("search_results.csv")
 ### 搜索器初始化选项
 
 - `plugin_name`: 插件名称（默认：'dmhy'）
-- `parser`: 解析器选项
+- `parser`: 解析器选项，RSS插件无需提供
 - `verify`: 验证选项
 - `timefmt`: 时间格式
 - `no_search_errors`: 是否忽略搜索错误
