@@ -57,7 +57,10 @@ def get_plugin(name: str):
     - name: Name of the plugin
 
     Returns:
-    - Plugin class if found, otherwise None
+    - Plugin class if found
+
+    Raises:
+    - PluginImportError: If the plugin cannot be imported
     """
     try:
         importlib.import_module(f".{name}", package=__name__)
