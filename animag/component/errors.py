@@ -37,6 +37,7 @@ class HashExtractError(SearchError):
 class PluginImportError(SearchError):
     pass
 
+
 def no_errors(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):

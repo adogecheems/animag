@@ -1,6 +1,6 @@
 import re
 import time
-from typing import List, Optional
+from typing import List
 from urllib.parse import urlencode
 
 from bs4 import BeautifulSoup
