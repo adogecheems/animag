@@ -1,4 +1,5 @@
 import argparse
+import time
 from typing import Dict, Any
 
 from rich.console import Console
@@ -47,22 +48,34 @@ def main() -> None:
     args = parser.parse_args()
     search_params: Dict[str, Any] = {'keyword': args.search, 'collected': args.collected}
 
+    start_time = time.time()
     searcher = Searcher(plugin_name=args.plugin, no_search_errors=True)
     animes = searcher.search(**search_params)
+    end_time = time.time()
+
+    elapsed_time = end_time - start_time
 
     if animes:
         print_results(animes)
+        console.print(f"[bold blue]搜索耗时: {elapsed_time:.2f} 秒[/bold blue]")
+
         selection = get_user_selection(len(searcher.animes))
 
         if selection > 0:
-            anime = animes[selection]
+            anime = animes[selection - 1]
             console.print(f"[bold green]已选择 {anime.title}[/bold green]")
             console.print("[bold green]其磁链为: [/bold green][bold yellow]"
-                          f"{anime.magnet if anime.magnet else "空"}[/bold yellow]")
+                          f"{anime.magnet if anime.magnet else '空'}[/bold yellow]",
+                          overflow="fold")
             console.print("[bold green]其种子链接为: [/bold green][bold yellow]"
-                          f"{anime.torrent if anime.torrent else "空"}[/bold yellow]")
+                          f"{anime.torrent if anime.torrent else '空'}[/bold yellow]",
+                          overflow="fold")
 
         else:
             console.print("[bold yellow]已退出选择[/bold yellow]")
     else:
         console.print("[bold yellow]搜索结果为空[/bold yellow]")
+
+
+if __name__ == '__main__':
+    main()

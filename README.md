@@ -81,15 +81,15 @@ searcher.save_csv("search_results.csv")
 
 |         站点          |     插件参数名称     | 速度 | 季度全集搜索 | size | magnet | torrent |                          注意事项                           |
 |:-------------------:|:--------------:|:--:|:------:|:----:|:------:|:-------:|:-------------------------------------------------------:|
-|      dmhy.org       |      dmhy      | 较慢 |   ✅    |  ✅   |   ✅    |    ❎    |                            无                            |
-|      dmhy.org       |    dmhy_rss    | 适中 |   ✅    |  ❎   |   ✅    |    ❎    |                            无                            |
-|       nyaa.si       |      nyaa      | 快  |   ❎    |  ✅   |   ✅    |    ✅    |                            无                            |
-|       nyaa.si       |    nyaa_rss    | 快  |   ❎    |  ✅   |   ✅    |    ✅    |                            无                            |
-|       acg.rip       |     acgrip     | 较快 |   ❎    |  ✅   |   ❎    |    ✅    |                            无                            |
-|       acg.rip       |   acgrip_rss   | 快  |   ❎    |  ❎   |   ❎    |    ✅    | 设置的最大搜索页数是5页，因为多了会被服务器阻断<br/>可以自行修改模块的`MAX_PAGE`，不建议超过9 |
-| www.tokyotosho.info |   tokyotosho   | 较快 |   ❎    |  ✅   |   ✅    |    ✅    |                        需要英文/日文搜索                        |
-| www.tokyotosho.info | tokyotosho_rss | 快  |   ❎    |  ✅   |   ✅    |    ✅    |                        需要英文/日文搜索                        |
-|   animetosho.org    |   animetosho   | 较快 |   ❎    |  ✅   |   ✅    |    ✅    |                         需要英文搜索                          |
+|      dmhy.org       |      dmhy      | 适中 |   ✅    |  ✅   |   ✅    |    ❎    |                            无                            |
+|      dmhy.org       |    dmhy_rss    | 极快 |   ❎    |  ❎   |   ✅    |    ❎    |                            无                            |
+|       nyaa.si       |      nyaa      | 极快 |   ❎    |  ✅   |   ✅    |    ✅    |                            无                            |
+|       nyaa.si       |    nyaa_rss    | 极快 |   ❎    |  ✅   |   ✅    |    ✅    |                            无                            |
+|       acg.rip       |     acgrip     | 适中 |   ❎    |  ✅   |   ❎    |    ✅    |                            无                            |
+|       acg.rip       |   acgrip_rss   | 较慢 |   ❎    |  ❎   |   ❎    |    ✅    | 设置的最大搜索页数是5页，因为多了会被服务器阻断<br/>可以自行修改模块的`MAX_PAGE`，不建议超过9 |
+| www.tokyotosho.info |   tokyotosho   | 适中 |   ❎    |  ✅   |   ✅    |    ✅    |                        需要英文/日文搜索                        |
+| www.tokyotosho.info | tokyotosho_rss | 较快 |   ❎    |  ✅   |   ✅    |    ✅    |                        需要英文/日文搜索                        |
+|   animetosho.org    |   animetosho   | 快  |   ❎    |  ✅   |   ✅    |    ✅    |                         需要英文搜索                          |
 |   animetosho.org    | animetosho_rss | 快  |   ❎    |  ✅   |   ✅    |    ✅    |                         需要英文搜索                          |
 
 以上所有插件都需要代理才能正常工作，确保正确配置代理设置

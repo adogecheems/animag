@@ -43,10 +43,8 @@ class Nyaa(BasePlugin):
 
             try:
                 bs = BeautifulSoup(html, self._parser)
-                tbody = bs.find("tbody")
 
-                if not tbody or tbody.string == "\n":
-                    break
+                tbody = bs.find("tbody")
 
                 for tr in tbody.find_all("tr"):
                     tds = tr.find_all("td")
@@ -54,7 +52,7 @@ class Nyaa(BasePlugin):
                     from_time = tds[4].string
                     to_time = time.strftime(self.timefmt, time.strptime(from_time, '%Y-%m-%d %H:%M'))
 
-                    title = tds[1].a.get("title")
+                    title = tds[1].find_all("a")[-1].string
                     torrent = DOMAIN + tds[2].find_all("a")[0]["href"]
                     magnet = tds[2].find_all("a")[1]["href"]
                     size = tds[3].string
@@ -62,6 +60,9 @@ class Nyaa(BasePlugin):
                     log.debug(f"Successfully got: {title}")
 
                     animes.append(Anime(to_time, title, size, magnet, torrent))
+
+                if bs.find(class_="next disabled"):
+                    break
 
                 page += 1
 

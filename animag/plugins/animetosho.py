@@ -85,8 +85,8 @@ class Animetosho(BasePlugin):
                     to_time = extract_time(from_time, self.timefmt)
 
                     size = item.find(class_='size').string
-                    torrent = item.find("a", class_="dllink")['href']
-                    magnet = item.find("a", class_="dllink").find_next("a")['href']
+                    torrent = item.find(class_="dllink")['href']
+                    magnet = item.find(class_="dllink").find_next("a")['href']
 
                     log.debug(f"Successfully got: {title}")
 

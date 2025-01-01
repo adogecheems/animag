@@ -8,7 +8,7 @@ with open('requirements.txt') as f:
 
 setup(
     name='animag',
-    version='2.1.0',
+    version='2.1.1',
     packages=find_packages(exclude=['tests*']),
     install_requires=requirements,
     entry_points={
